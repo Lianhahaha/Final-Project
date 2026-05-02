@@ -1,0 +1,1319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  CafeMaster · Dashboard
+  Root   : AnchorPane  (matches your working layout)
+  Sidebar: VBox fixed at left 240 px
+  Content: StackPane from left=240 → right=0, only one child visible at a time
+  Forms  : inventory_form  (visible by default)
+           orders_form     (visible=false)
+           reports_form    (visible=false)
+           staff_form      (visible=false)
+           settings_form   (visible=false)
+           dashboard_form  (visible=false – placeholder, kept for safety)
+-->
+<AnchorPane prefHeight="766.0" prefWidth="1234.0"
+            style="-fx-background-color: #EDE8DF;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.student.cafemaster.DashboardController">
+  <children>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SIDEBAR — fixed 240 px  (YOUR ORIGINAL — only logout fixed)
+         ═══════════════════════════════════════════════════════════ -->
+    <VBox prefWidth="240.0"
+          style="-fx-background-color: #1C1008;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0, 4, 0);"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+      <children>
+
+        <!-- Brand -->
+        <VBox alignment="CENTER" prefHeight="148.0" spacing="4"
+              style="-fx-background-color: #120B04;
+                     -fx-border-color: transparent transparent #2E1F10 transparent;
+                     -fx-border-width: 1;">
+          <children>
+            <Label style="-fx-font-size: 40; -fx-text-fill: #C8922A;
+                          -fx-effect: dropshadow(gaussian, rgba(200,146,42,0.6), 12, 0, 0, 0);"
+                   text="☕" />
+            <Label fx:id="sidebar_shopName"
+                   style="-fx-text-fill: #F0E6D3; -fx-font-size: 24;
+                          -fx-font-weight: bold; -fx-letter-spacing: 1;" text="CafeMaster">
+              <font><Font name="System Bold" size="24.0" /></font>
+            </Label>
+            <Label style="-fx-text-fill: #6B5440; -fx-font-size: 11;
+                          -fx-letter-spacing: 2;" text="Admin Dashboard" />
+          </children>
+        </VBox>
+
+        <!-- Section label -->
+        <Label style="-fx-text-fill: #4A3525; -fx-font-size: 9;
+                      -fx-font-weight: bold; -fx-letter-spacing: 2;" text="NAVIGATION">
+          <VBox.margin><Insets bottom="6.0" left="20.0" top="22.0" /></VBox.margin>
+        </Label>
+
+        <!-- Nav buttons -->
+        <VBox spacing="4.0" VBox.vgrow="ALWAYS">
+          <padding><Insets left="12.0" right="12.0" /></padding>
+          <children>
+
+            <Button fx:id="inventory_btn"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#switchForm" prefHeight="46.0"
+                    style="-fx-background-color: #C8922A; -fx-text-fill: #1C1008;
+                           -fx-font-weight: bold; -fx-font-size: 13;
+                           -fx-background-radius: 8; -fx-cursor: hand;
+                           -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;
+                           -fx-effect: dropshadow(gaussian, rgba(200,146,42,0.4), 10, 0, 0, 3);"
+                    text="📦   Inventory" />
+
+            <Button fx:id="orders_btn"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#switchForm" prefHeight="46.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #9E826A;
+                           -fx-font-size: 13; -fx-background-radius: 8; -fx-cursor: hand;
+                           -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"
+                    text="🛒   Orders" />
+
+            <Button fx:id="reports_btn"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#switchForm" prefHeight="46.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #9E826A;
+                           -fx-font-size: 13; -fx-background-radius: 8; -fx-cursor: hand;
+                           -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"
+                    text="📊   Reports" />
+
+            <Button fx:id="staff_btn"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#switchForm" prefHeight="46.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #9E826A;
+                           -fx-font-size: 13; -fx-background-radius: 8; -fx-cursor: hand;
+                           -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"
+                    text="👥   Staff" />
+
+            <Button fx:id="settings_btn"
+                    maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    onAction="#switchForm" prefHeight="46.0"
+                    style="-fx-background-color: transparent; -fx-text-fill: #9E826A;
+                           -fx-font-size: 13; -fx-background-radius: 8; -fx-cursor: hand;
+                           -fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 14;"
+                    text="⚙️   Settings" />
+
+          </children>
+        </VBox>
+
+        <!-- Admin chip -->
+        <VBox spacing="3"
+              style="-fx-background-color: #120B04;
+                     -fx-border-color: #2E1F10 transparent transparent transparent;
+                     -fx-border-width: 1;">
+          <padding><Insets bottom="14.0" left="18.0" right="18.0" top="14.0" /></padding>
+          <children>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+              <children>
+                <Label style="-fx-font-size: 28;" text="👤" />
+                <VBox spacing="2">
+                  <children>
+                    <Label fx:id="sidebar_adminName"
+                           style="-fx-text-fill: #E8D9C0; -fx-font-weight: bold;
+                                  -fx-font-size: 13;" text="Admin User" />
+                    <Label fx:id="sidebar_adminRole"
+                           style="-fx-text-fill: #4A3525; -fx-font-size: 10;"
+                           text="Administrator" />
+                  </children>
+                </VBox>
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+
+        <!-- Logout button — onAction FIXED to call #onLogout -->
+        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                prefHeight="42.0"
+                onAction="#onLogout"
+                style="-fx-background-color: #6B2213; -fx-text-fill: #F5C6B8;
+                       -fx-font-weight: bold; -fx-font-size: 13;
+                       -fx-background-radius: 8; -fx-cursor: hand;"
+                text="🚪   Logout">
+          <VBox.margin><Insets bottom="22.0" left="18.0" right="18.0" top="10.0" /></VBox.margin>
+        </Button>
+
+      </children>
+    </VBox>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         MAIN CONTENT AREA — StackPane, forms stacked, one visible
+         ═══════════════════════════════════════════════════════════ -->
+    <StackPane AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="240.0"
+               AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="0.0">
+      <children>
+
+
+        <!-- ─────────────────────────────────────────────────────────
+             FORM 1: INVENTORY  (fx:id="inventory_form")
+             YOUR ORIGINAL CONTENT — NOT CHANGED
+             ───────────────────────────────────────────────────────── -->
+        <AnchorPane fx:id="inventory_form">
+          <children>
+
+            <!-- Header bar -->
+            <HBox alignment="CENTER_LEFT" prefHeight="74.0" spacing="16.0"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: transparent transparent #DDD3C0 transparent;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);"
+                  AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+              <padding><Insets left="28.0" right="28.0" /></padding>
+              <children>
+                <VBox spacing="2">
+                  <children>
+                    <Label style="-fx-font-size: 20; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Inventory Management">
+                      <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+                    <Label style="-fx-text-fill: #9E826A; -fx-font-size: 12;"
+                           text="Manage your café products and stock levels" />
+                  </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <!-- Stock legend -->
+                <HBox alignment="CENTER" spacing="18">
+                  <children>
+                    <HBox alignment="CENTER" spacing="5">
+                      <children>
+                        <Label style="-fx-text-fill: #C0392B; -fx-font-size: 15;
+                                      -fx-effect: dropshadow(gaussian,rgba(192,57,43,0.5),6,0,0,0);"
+                               text="●" />
+                        <Label style="-fx-font-size: 11; -fx-text-fill: #7B6555;"
+                               text="Critical ≤5" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER" spacing="5">
+                      <children>
+                        <Label style="-fx-text-fill: #D68910; -fx-font-size: 15;
+                                      -fx-effect: dropshadow(gaussian,rgba(214,137,16,0.5),6,0,0,0);"
+                               text="●" />
+                        <Label style="-fx-font-size: 11; -fx-text-fill: #7B6555;"
+                               text="Medium ≤15" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER" spacing="5">
+                      <children>
+                        <Label style="-fx-text-fill: #1E8449; -fx-font-size: 15;
+                                      -fx-effect: dropshadow(gaussian,rgba(30,132,73,0.5),6,0,0,0);"
+                               text="●" />
+                        <Label style="-fx-font-size: 11; -fx-text-fill: #7B6555;"
+                               text="Good &gt;15" />
+                      </children>
+                    </HBox>
+                  </children>
+                </HBox>
+                <!-- Search -->
+                <TextField fx:id="inventory_search" prefHeight="40.0" prefWidth="300.0"
+                           promptText="🔍  Search by name, ID or type..."
+                           style="-fx-background-color: #F0EAE0;
+                                  -fx-border-color: #C8B89A;
+                                  -fx-border-radius: 20; -fx-background-radius: 20;
+                                  -fx-padding: 0 16 0 16; -fx-font-size: 13;
+                                  -fx-text-fill: #2C1C0C;
+                                  -fx-prompt-text-fill: #A89070;" />
+              </children>
+            </HBox>
+
+            <!-- Stat cards -->
+            <HBox prefHeight="100.0" spacing="16.0"
+                  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                  AnchorPane.topAnchor="90.0">
+              <children>
+                <!-- Total Products -->
+                <HBox maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 4);"
+                      HBox.hgrow="ALWAYS">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #3182CE;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets bottom="14.0" left="16.0" right="16.0" top="14.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="📦" />
+                        <Label fx:id="dashboard_totalProducts"
+                               style="-fx-font-size: 30; -fx-text-fill: #3182CE;
+                                      -fx-font-weight: bold;" text="0">
+                          <font><Font name="System Bold" size="30.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Total Products" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+                <!-- Critical Stock -->
+                <HBox maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 4);"
+                      HBox.hgrow="ALWAYS">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #C0392B;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets bottom="14.0" left="16.0" right="16.0" top="14.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="⚠️" />
+                        <Label fx:id="dashboard_criticalStock"
+                               style="-fx-font-size: 30; -fx-text-fill: #C0392B;
+                                      -fx-font-weight: bold;" text="0">
+                          <font><Font name="System Bold" size="30.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Critical Stock (≤5)" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+                <!-- Medium Stock -->
+                <HBox maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 4);"
+                      HBox.hgrow="ALWAYS">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #D68910;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets bottom="14.0" left="16.0" right="16.0" top="14.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="📊" />
+                        <Label fx:id="dashboard_mediumStock"
+                               style="-fx-font-size: 30; -fx-text-fill: #D68910;
+                                      -fx-font-weight: bold;" text="0">
+                          <font><Font name="System Bold" size="30.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Medium Stock (≤15)" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+                <!-- Inventory Value -->
+                <HBox maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 4);"
+                      HBox.hgrow="ALWAYS">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #1E8449;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets bottom="14.0" left="16.0" right="16.0" top="14.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="💰" />
+                        <Label fx:id="dashboard_inventoryValue"
+                               style="-fx-font-size: 22; -fx-text-fill: #1E8449;
+                                      -fx-font-weight: bold;" text="₱0.00">
+                          <font><Font name="System Bold" size="22.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Inventory Value" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+              </children>
+            </HBox>
+
+            <!-- Form + Table row -->
+            <HBox spacing="16.0"
+                  AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0"
+                  AnchorPane.rightAnchor="20.0"  AnchorPane.topAnchor="206.0">
+              <children>
+
+                <!-- Product Details form -->
+                <VBox prefWidth="295.0" spacing="11.0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 14, 0, 0, 4);">
+                  <padding><Insets bottom="22.0" left="22.0" right="22.0" top="22.0" /></padding>
+                  <children>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                      <children>
+                        <Label style="-fx-font-size: 17;" text="📝" />
+                        <Label style="-fx-font-size: 15; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Product Details">
+                          <font><Font name="System Bold" size="15.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <Separator style="-fx-background-color: #DDD3C0;" />
+                    <!-- Product ID -->
+                    <VBox spacing="4">
+                      <children>
+                        <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                      -fx-font-weight: bold;" text="Product ID" />
+                        <TextField fx:id="inventory_productID" prefHeight="38.0"
+                                   promptText="e.g.  101"
+                                   style="-fx-background-color: #F5F0E8;
+                                          -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                          -fx-background-radius: 7; -fx-padding: 0 12 0 12;
+                                          -fx-font-size: 13; -fx-text-fill: #1C1008;
+                                          -fx-prompt-text-fill: #B8A080;" />
+                      </children>
+                    </VBox>
+                    <!-- Product Name -->
+                    <VBox spacing="4">
+                      <children>
+                        <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                      -fx-font-weight: bold;" text="Product Name" />
+                        <TextField fx:id="inventory_productName" prefHeight="38.0"
+                                   promptText="e.g.  Espresso"
+                                   style="-fx-background-color: #F5F0E8;
+                                          -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                          -fx-background-radius: 7; -fx-padding: 0 12 0 12;
+                                          -fx-font-size: 13; -fx-text-fill: #1C1008;
+                                          -fx-prompt-text-fill: #B8A080;" />
+                      </children>
+                    </VBox>
+                    <!-- Type -->
+                    <VBox spacing="4">
+                      <children>
+                        <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                      -fx-font-weight: bold;" text="Type" />
+                        <TextField fx:id="inventory_type" prefHeight="38.0"
+                                   promptText="e.g.  Beverage / Pastry"
+                                   style="-fx-background-color: #F5F0E8;
+                                          -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                          -fx-background-radius: 7; -fx-padding: 0 12 0 12;
+                                          -fx-font-size: 13; -fx-text-fill: #1C1008;
+                                          -fx-prompt-text-fill: #B8A080;" />
+                      </children>
+                    </VBox>
+                    <!-- Stock + Price -->
+                    <HBox spacing="10">
+                      <children>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                          <children>
+                            <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                          -fx-font-weight: bold;" text="Stock (qty)" />
+                            <TextField fx:id="inventory_stock" prefHeight="38.0"
+                                       promptText="0"
+                                       style="-fx-background-color: #F5F0E8;
+                                              -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                              -fx-background-radius: 7; -fx-padding: 0 12 0 12;
+                                              -fx-font-size: 13; -fx-text-fill: #1C1008;
+                                              -fx-prompt-text-fill: #B8A080;" />
+                          </children>
+                        </VBox>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                          <children>
+                            <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                          -fx-font-weight: bold;" text="Price (₱)" />
+                            <TextField fx:id="inventory_price" prefHeight="38.0"
+                                       promptText="0.00"
+                                       style="-fx-background-color: #F5F0E8;
+                                              -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                              -fx-background-radius: 7; -fx-padding: 0 12 0 12;
+                                              -fx-font-size: 13; -fx-text-fill: #1C1008;
+                                              -fx-prompt-text-fill: #B8A080;" />
+                          </children>
+                        </VBox>
+                      </children>
+                    </HBox>
+                    <Region VBox.vgrow="ALWAYS" />
+                    <Separator style="-fx-background-color: #DDD3C0;" />
+                    <!-- ADD -->
+                    <Button fx:id="inventory_addBtn"
+                            maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                            onAction="#inventoryAddBtn" prefHeight="44.0"
+                            style="-fx-background-color: #1E8449; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-font-size: 13;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian, rgba(30,132,73,0.4), 10, 0, 0, 3);"
+                            text="➕   ADD PRODUCT" />
+                    <!-- UPDATE + DELETE -->
+                    <HBox spacing="10.0">
+                      <children>
+                        <Button fx:id="inventory_updateBtn"
+                                maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                onAction="#inventoryUpdateBtn" prefHeight="42.0"
+                                style="-fx-background-color: #1A5276; -fx-text-fill: white;
+                                       -fx-font-weight: bold; -fx-font-size: 12;
+                                       -fx-background-radius: 8; -fx-cursor: hand;
+                                       -fx-effect: dropshadow(gaussian, rgba(26,82,118,0.4), 10, 0, 0, 3);"
+                                text="✏️  UPDATE" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="inventory_deleteBtn"
+                                maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                onAction="#inventoryDeleteBtn" prefHeight="42.0"
+                                style="-fx-background-color: #922B21; -fx-text-fill: white;
+                                       -fx-font-weight: bold; -fx-font-size: 12;
+                                       -fx-background-radius: 8; -fx-cursor: hand;
+                                       -fx-effect: dropshadow(gaussian, rgba(146,43,33,0.4), 10, 0, 0, 3);"
+                                text="🗑️  DELETE" HBox.hgrow="ALWAYS" />
+                      </children>
+                    </HBox>
+                    <!-- CLEAR -->
+                    <Button fx:id="inventory_clearBtn"
+                            maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                            onAction="#inventoryClearBtn" prefHeight="36.0"
+                            style="-fx-background-color: #F0EAE0; -fx-text-fill: #5A4030;
+                                   -fx-font-size: 11; -fx-font-weight: bold;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-border-color: #C8B89A; -fx-border-radius: 8;
+                                   -fx-border-width: 1;"
+                            text="✖   CLEAR FORM" />
+                  </children>
+                </VBox>
+
+                <!-- Product List table -->
+                <VBox style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 14, 0, 0, 4);"
+                      HBox.hgrow="ALWAYS">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="56.0" spacing="10"
+                          style="-fx-background-color: #F5F0E8;
+                                 -fx-background-radius: 12 12 0 0;
+                                 -fx-border-color: transparent transparent #DDD3C0 transparent;
+                                 -fx-border-width: 1;">
+                      <padding><Insets left="22.0" right="22.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 18;" text="📋" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Product List">
+                          <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="label_tableCount"
+                               style="-fx-text-fill: #9E826A; -fx-font-size: 12;
+                                      -fx-background-color: #EDE8DF;
+                                      -fx-background-radius: 20; -fx-padding: 3 10 3 10;"
+                               text="Showing 0 items" />
+                      </children>
+                    </HBox>
+                    <TableView fx:id="inventory_tableView"
+                               onMouseClicked="#inventorySelectData"
+                               style="-fx-background-color: transparent;
+                                      -fx-background-radius: 0 0 12 12;
+                                      -fx-border-color: transparent;
+                                      -fx-table-cell-border-color: #EDE8DF;"
+                               VBox.vgrow="ALWAYS">
+                      <columns>
+                        <TableColumn fx:id="inventory_col_productID"
+                                     prefWidth="100.0" text="Product ID" />
+                        <TableColumn fx:id="inventory_col_productName"
+                                     prefWidth="180.0" text="Product Name" />
+                        <TableColumn fx:id="inventory_col_type"
+                                     prefWidth="110.0" text="Type" />
+                        <TableColumn fx:id="inventory_col_stock"
+                                     prefWidth="80.0" text="Stock" />
+                        <TableColumn fx:id="inventory_col_price"
+                                     prefWidth="100.0" text="Price" />
+                        <TableColumn fx:id="inventory_col_status"
+                                     prefWidth="110.0" text="Status" />
+                      </columns>
+                      <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                      </columnResizePolicy>
+                    </TableView>
+                  </children>
+                </VBox>
+
+              </children>
+            </HBox>
+
+            <!-- Status bar -->
+            <HBox alignment="CENTER_LEFT" prefHeight="44.0" spacing="8"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: #DDD3C0 transparent transparent transparent;
+                         -fx-border-width: 1;"
+                  AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0">
+              <padding><Insets left="22.0" right="22.0" /></padding>
+              <children>
+                <Label fx:id="statusDot"
+                       style="-fx-text-fill: #1E8449; -fx-font-size: 14;" text="●" />
+                <Label fx:id="db_status_label"
+                       style="-fx-text-fill: #5A4030; -fx-font-size: 12;"
+                       text="Ready — awaiting database connection" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label style="-fx-text-fill: #C8B89A; -fx-font-size: 11;"
+                       text="CafeMaster  v1.0  •  Inventory Module" />
+              </children>
+            </HBox>
+
+          </children>
+        </AnchorPane>
+        <!-- END: inventory_form -->
+
+
+        <!-- ─────────────────────────────────────────────────────────
+             FORM 2: DASHBOARD placeholder  (kept, visible=false)
+             ───────────────────────────────────────────────────────── -->
+        <AnchorPane fx:id="dashboard_form" visible="false">
+          <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="74.0" spacing="16.0"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: transparent transparent #DDD3C0 transparent;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 12, 0, 0, 4);"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+              <padding><Insets left="28.0" right="28.0" /></padding>
+              <children>
+                <VBox spacing="2">
+                  <children>
+                    <Label style="-fx-font-size: 20; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Overview">
+                      <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+                    <Label style="-fx-text-fill: #9E826A; -fx-font-size: 12;"
+                           text="Welcome back — here's what's happening in your café today" />
+                  </children>
+                </VBox>
+              </children>
+            </HBox>
+            <VBox alignment="CENTER" spacing="16"
+                  style="-fx-background-color: #FEFCF8; -fx-background-radius: 16;
+                         -fx-border-color: #E0D4C0; -fx-border-radius: 16;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 14, 0, 0, 4);"
+                  AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0"
+                  AnchorPane.rightAnchor="40.0"  AnchorPane.topAnchor="110.0">
+              <children>
+                <Label style="-fx-font-size: 64;
+                              -fx-effect: dropshadow(gaussian, rgba(200,146,42,0.5), 18, 0, 0, 0);"
+                       text="☕" />
+                <Label style="-fx-font-size: 26; -fx-font-weight: bold;
+                              -fx-text-fill: #2d1e16;" text="Dashboard Overview">
+                  <font><Font name="System Bold" size="26.0" /></font>
+                </Label>
+                <Label style="-fx-font-size: 14; -fx-text-fill: #9E826A;"
+                       text="Select a section from the sidebar to get started." />
+              </children>
+            </VBox>
+          </children>
+        </AnchorPane>
+        <!-- END: dashboard_form -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             FORM 3: ORDERS  (fx:id="orders_form")
+             Left = menu grid of buttons  |  Right = cart / receipt table
+             ═══════════════════════════════════════════════════════════ -->
+        <AnchorPane fx:id="orders_form" visible="false">
+          <children>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="16.0" prefHeight="74.0"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: transparent transparent #DDD3C0 transparent;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),12,0,0,4);"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+              <padding><Insets left="28.0" right="28.0" /></padding>
+              <children>
+                <VBox spacing="2">
+                  <children>
+                    <Label style="-fx-font-size: 20; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Orders">
+                      <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+                    <Label style="-fx-text-fill: #9E826A; -fx-font-size: 12;"
+                           text="Build a customer order from the menu below" />
+                  </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <!-- Order total badge -->
+                <VBox alignment="CENTER" spacing="2"
+                      style="-fx-background-color: #1C1008; -fx-background-radius: 10;
+                             -fx-padding: 8 18 8 18;">
+                  <children>
+                    <Label text="ORDER TOTAL"
+                           style="-fx-text-fill: #9E826A; -fx-font-size: 9;
+                                  -fx-font-weight: bold;" />
+                    <Label fx:id="orders_totalLabel" text="₱0.00"
+                           style="-fx-text-fill: #C8922A; -fx-font-size: 22;
+                                  -fx-font-weight: bold;">
+                      <font><Font name="System Bold" size="22.0" /></font>
+                    </Label>
+                  </children>
+                </VBox>
+              </children>
+            </HBox>
+
+            <!-- Body: Menu Grid + Cart -->
+            <HBox spacing="16.0"
+                  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                  AnchorPane.topAnchor="90.0"  AnchorPane.bottomAnchor="20.0">
+              <children>
+
+                <!-- Menu panel -->
+                <VBox spacing="12.0" prefWidth="380.0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+                  <padding><Insets top="18.0" bottom="18.0" left="18.0" right="18.0" /></padding>
+                  <children>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                      <children>
+                        <Label style="-fx-font-size: 18;" text="☕" />
+                        <Label style="-fx-font-size: 15; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Menu">
+                          <font><Font name="System Bold" size="15.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <Separator style="-fx-background-color: #DDD3C0;" />
+                    <!-- Dynamic menu — populated from productList in DashboardController -->
+                    <TilePane fx:id="orders_menuGrid"
+                              prefColumns="3"
+                              hgap="10.0" vgap="10.0"
+                              prefTileHeight="80.0"
+                              tileAlignment="CENTER"
+                              VBox.vgrow="ALWAYS"
+                              style="-fx-background-color: transparent;" />
+                  </children>
+                </VBox>
+
+                <!-- Cart / Receipt panel -->
+                <VBox HBox.hgrow="ALWAYS" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+                  <children>
+                    <!-- Cart header -->
+                    <HBox alignment="CENTER_LEFT" spacing="8" prefHeight="52.0"
+                          style="-fx-background-color: #F5F0E8;
+                                 -fx-background-radius: 12 12 0 0;
+                                 -fx-border-color: transparent transparent #DDD3C0 transparent;
+                                 -fx-border-width: 1;">
+                      <padding><Insets left="20.0" right="20.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 18;" text="🧾" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Current Order">
+                          <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="🗑 Clear" onAction="#onClearCart"
+                                mnemonicParsing="false"
+                                style="-fx-background-color: #F0EAE0;
+                                       -fx-text-fill: #922B21; -fx-font-size: 11;
+                                       -fx-font-weight: bold; -fx-background-radius: 6;
+                                       -fx-cursor: hand; -fx-border-color: #C8B89A;
+                                       -fx-border-radius: 6; -fx-border-width: 1;" />
+                      </children>
+                    </HBox>
+                    <!-- Cart table -->
+                    <TableView fx:id="orders_cartTable" VBox.vgrow="ALWAYS"
+                               style="-fx-background-color: transparent;
+                                      -fx-border-color: transparent;
+                                      -fx-table-cell-border-color: #EDE8DF;">
+                      <columns>
+                        <TableColumn fx:id="orders_col_item"  text="Item"  prefWidth="180.0" />
+                        <TableColumn fx:id="orders_col_qty"   text="Qty"   prefWidth="60.0" />
+                        <TableColumn fx:id="orders_col_price" text="Price" prefWidth="90.0" />
+                        <TableColumn fx:id="orders_col_total" text="Total" prefWidth="90.0" />
+                      </columns>
+                      <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                      </columnResizePolicy>
+                    </TableView>
+                    <!-- Qty controls bar -->
+                    <HBox alignment="CENTER_LEFT" spacing="10" prefHeight="46.0"
+                          style="-fx-background-color: #F5F0E8;
+                                 -fx-border-color: #DDD3C0 transparent transparent transparent;
+                                 -fx-border-width: 1;">
+                      <padding><Insets left="14.0" right="14.0" /></padding>
+                      <children>
+                        <!-- Decrease -->
+                        <Button text="-" onAction="#onDecreaseQty"
+                                mnemonicParsing="false" prefHeight="32.0" prefWidth="38.0"
+                                style="-fx-background-color: #922B21; -fx-text-fill: white;
+                                       -fx-font-size: 18; -fx-font-weight: bold;
+                                       -fx-background-radius: 6; -fx-cursor: hand;" />
+                        <!-- Qty label -->
+                        <Label fx:id="orders_qtyLabel" text="Select an item to adjust qty"
+                               style="-fx-text-fill: #5A4030; -fx-font-size: 12;"
+                               HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+                        <!-- Increase -->
+                        <Button text="+" onAction="#onIncreaseQty"
+                                mnemonicParsing="false" prefHeight="32.0" prefWidth="38.0"
+                                style="-fx-background-color: #1E8449; -fx-text-fill: white;
+                                       -fx-font-size: 18; -fx-font-weight: bold;
+                                       -fx-background-radius: 6; -fx-cursor: hand;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <!-- Remove selected item -->
+                        <Button text="🗑 Remove Item" onAction="#onRemoveCartItem"
+                                mnemonicParsing="false" prefHeight="32.0"
+                                style="-fx-background-color: #F0EAE0; -fx-text-fill: #922B21;
+                                       -fx-font-size: 11; -fx-font-weight: bold;
+                                       -fx-background-radius: 6; -fx-cursor: hand;
+                                       -fx-border-color: #C8B89A; -fx-border-radius: 6;
+                                       -fx-border-width: 1;" />
+                      </children>
+                    </HBox>
+                    <!-- Cash payment bar -->
+                    <HBox alignment="CENTER_LEFT" spacing="12" prefHeight="52.0"
+                          style="-fx-background-color: #1C1008;
+                                 -fx-border-color: #2E1F10 transparent transparent transparent;
+                                 -fx-border-width: 1;">
+                      <padding><Insets left="14.0" right="14.0" /></padding>
+                      <children>
+                        <Label text="💵" style="-fx-font-size: 18;" />
+                        <Label text="Cash Tendered:"
+                               style="-fx-text-fill: #9E826A; -fx-font-size: 12;
+                                      -fx-font-weight: bold;" />
+                        <TextField fx:id="orders_cashField"
+                                   promptText="0.00" prefHeight="34.0" prefWidth="110.0"
+                                   style="-fx-background-color: #2E1F10;
+                                          -fx-border-color: #4A3525; -fx-border-radius: 6;
+                                          -fx-background-radius: 6; -fx-padding: 0 10 0 10;
+                                          -fx-font-size: 14; -fx-font-weight: bold;
+                                          -fx-text-fill: #F0E6D3;
+                                          -fx-prompt-text-fill: #4A3525;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label text="Change:"
+                               style="-fx-text-fill: #9E826A; -fx-font-size: 12;
+                                      -fx-font-weight: bold;" />
+                        <Label fx:id="orders_changeLabel" text="₱0.00"
+                               style="-fx-text-fill: #C8922A; -fx-font-size: 18;
+                                      -fx-font-weight: bold;">
+                          <font><Font name="System Bold" size="18.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <!-- Place Order -->
+                    <Button text="✅   PLACE ORDER"
+                            maxWidth="1.7976931348623157E308" prefHeight="48.0"
+                            onAction="#onPlaceOrder" mnemonicParsing="false"
+                            style="-fx-background-color: #C8922A; -fx-text-fill: #1C1008;
+                                   -fx-font-weight: bold; -fx-font-size: 14;
+                                   -fx-background-radius: 0 0 12 12; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian,rgba(200,146,42,0.4),10,0,0,3);" />
+                  </children>
+                </VBox>
+
+              </children>
+            </HBox>
+
+          </children>
+        </AnchorPane>
+        <!-- END: orders_form -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             FORM 4: REPORTS  (fx:id="reports_form")
+             Stat cards + animated BarChart
+             ═══════════════════════════════════════════════════════════ -->
+        <AnchorPane fx:id="reports_form" visible="false">
+          <children>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="16.0" prefHeight="74.0"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: transparent transparent #DDD3C0 transparent;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),12,0,0,4);"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+              <padding><Insets left="28.0" right="28.0" /></padding>
+              <children>
+                <VBox spacing="2">
+                  <children>
+                    <Label style="-fx-font-size: 20; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Reports">
+                      <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+                    <Label style="-fx-text-fill: #9E826A; -fx-font-size: 12;"
+                           text="Sales analytics and performance overview" />
+                  </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <VBox alignment="CENTER_RIGHT" spacing="4">
+                  <children>
+                    <Label text="Select Date:" style="-fx-text-fill: #5A4030; -fx-font-size: 11; -fx-font-weight: bold;" />
+                    <DatePicker fx:id="reports_datePicker" prefWidth="160.0" editable="false"
+                                style="-fx-font-size: 13; -fx-background-radius: 6; -fx-border-radius: 6;" />
+                  </children>
+                </VBox>
+              </children>
+            </HBox>
+
+            <!-- Stat cards -->
+            <HBox spacing="16.0" prefHeight="100.0"
+                  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                  AnchorPane.topAnchor="90.0">
+              <children>
+                <!-- Total Sales -->
+                <HBox HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.07),12,0,0,4);">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #C8922A;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets top="14.0" bottom="14.0" left="16.0" right="16.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="💰" />
+                        <Label fx:id="reports_totalSales" text="₱0.00"
+                               style="-fx-font-size: 24; -fx-text-fill: #C8922A;
+                                      -fx-font-weight: bold;">
+                          <font><Font name="System Bold" size="24.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Total Sales" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+                <!-- Orders Count -->
+                <HBox HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.07),12,0,0,4);">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #3182CE;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets top="14.0" bottom="14.0" left="16.0" right="16.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="📋" />
+                        <Label fx:id="reports_ordersCount" text="0"
+                               style="-fx-font-size: 30; -fx-text-fill: #3182CE;
+                                      -fx-font-weight: bold;">
+                          <font><Font name="System Bold" size="30.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Orders Placed" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+                <!-- Best Seller -->
+                <HBox HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #E0D4C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.07),12,0,0,4);">
+                  <children>
+                    <VBox prefWidth="6"
+                          style="-fx-background-color: #1E8449;
+                                 -fx-background-radius: 12 0 0 12;" />
+                    <VBox alignment="CENTER_LEFT" spacing="3" HBox.hgrow="ALWAYS">
+                      <padding><Insets top="14.0" bottom="14.0" left="16.0" right="16.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 20;" text="⭐" />
+                        <Label fx:id="reports_bestSeller" text="—"
+                               style="-fx-font-size: 18; -fx-text-fill: #1E8449;
+                                      -fx-font-weight: bold;">
+                          <font><Font name="System Bold" size="18.0" /></font>
+                        </Label>
+                        <Label style="-fx-text-fill: #9E826A; -fx-font-size: 11;"
+                               text="Best Seller" />
+                      </children>
+                    </VBox>
+                  </children>
+                </HBox>
+              </children>
+            </HBox>
+
+            <!-- Chart row: Stock (left) + Sales (right) -->
+            <HBox spacing="16.0"
+                  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                  AnchorPane.topAnchor="206.0"  AnchorPane.bottomAnchor="20.0">
+              <children>
+
+                <!-- Stock chart -->
+                <VBox HBox.hgrow="ALWAYS" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+                  <padding><Insets top="16.0" bottom="16.0" left="16.0" right="16.0" /></padding>
+                  <children>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                      <children>
+                        <Label style="-fx-font-size: 16;" text="📦" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Stock by Product">
+                          <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <BarChart fx:id="reports_barChart" VBox.vgrow="ALWAYS"
+                              animated="true"
+                              style="-fx-background-color: transparent;">
+                      <xAxis>
+                        <CategoryAxis fx:id="reports_xAxis" label="Product" />
+                      </xAxis>
+                      <yAxis>
+                        <NumberAxis fx:id="reports_yAxis" label="Units in Stock" />
+                      </yAxis>
+                    </BarChart>
+                  </children>
+                </VBox>
+
+                <!-- Sales chart -->
+                <VBox HBox.hgrow="ALWAYS" spacing="0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+                  <padding><Insets top="16.0" bottom="16.0" left="16.0" right="16.0" /></padding>
+                  <children>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                      <children>
+                        <Label style="-fx-font-size: 16;" text="💰" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Sales Revenue by Product">
+                          <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <BarChart fx:id="reports_salesChart" VBox.vgrow="ALWAYS"
+                              animated="true"
+                              style="-fx-background-color: transparent;">
+                      <xAxis>
+                        <CategoryAxis fx:id="reports_salesXAxis" label="Product" />
+                      </xAxis>
+                      <yAxis>
+                        <NumberAxis fx:id="reports_salesYAxis" label="Revenue (₱)" />
+                      </yAxis>
+                    </BarChart>
+                  </children>
+                </VBox>
+
+              </children>
+            </HBox>
+
+          </children>
+        </AnchorPane>
+        <!-- END: reports_form -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             FORM 5: STAFF  (fx:id="staff_form")
+             Left = add form  |  Right = staff table
+             ═══════════════════════════════════════════════════════════ -->
+        <AnchorPane fx:id="staff_form" visible="false">
+          <children>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="16.0" prefHeight="74.0"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: transparent transparent #DDD3C0 transparent;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),12,0,0,4);"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+              <padding><Insets left="28.0" right="28.0" /></padding>
+              <children>
+                <VBox spacing="2">
+                  <children>
+                    <Label style="-fx-font-size: 20; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Staff Management">
+                      <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+                    <Label style="-fx-text-fill: #9E826A; -fx-font-size: 12;"
+                           text="Manage your café team members and roles" />
+                  </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="staff_countLabel" text="0 staff members"
+                       style="-fx-text-fill: #9E826A; -fx-font-size: 12;
+                              -fx-background-color: #EDE8DF; -fx-background-radius: 20;
+                              -fx-padding: 4 12 4 12;" />
+              </children>
+            </HBox>
+
+            <!-- Body -->
+            <HBox spacing="16.0"
+                  AnchorPane.leftAnchor="20.0"  AnchorPane.rightAnchor="20.0"
+                  AnchorPane.topAnchor="90.0"   AnchorPane.bottomAnchor="20.0">
+              <children>
+
+                <!-- Add Staff form -->
+                <VBox spacing="11.0" prefWidth="280.0"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+                  <padding><Insets top="22.0" bottom="22.0" left="22.0" right="22.0" /></padding>
+                  <children>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                      <children>
+                        <Label style="-fx-font-size: 16;" text="👤" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Add Staff Member">
+                          <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <Separator style="-fx-background-color: #DDD3C0;" />
+                    <!-- Name -->
+                    <VBox spacing="4">
+                      <children>
+                        <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                      -fx-font-weight: bold;" text="Full Name" />
+                        <TextField fx:id="staff_nameField" prefHeight="38.0"
+                                   promptText="e.g. Maria Santos"
+                                   style="-fx-background-color: #F5F0E8;
+                                          -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                          -fx-background-radius: 7; -fx-padding: 0 12 0 12;
+                                          -fx-font-size: 13; -fx-text-fill: #1C1008;
+                                          -fx-prompt-text-fill: #B8A080;" />
+                      </children>
+                    </VBox>
+                    <!-- Role combo -->
+                    <VBox spacing="4">
+                      <children>
+                        <Label style="-fx-text-fill: #5A4030; -fx-font-size: 11;
+                                      -fx-font-weight: bold;" text="Role" />
+                        <ComboBox fx:id="staff_roleCombo"
+                                  maxWidth="1.7976931348623157E308"
+                                  promptText="Select role..."
+                                  style="-fx-background-color: #F5F0E8;
+                                         -fx-border-color: #C8B89A; -fx-border-radius: 7;
+                                         -fx-background-radius: 7; -fx-font-size: 13;" />
+                      </children>
+                    </VBox>
+                    <Region VBox.vgrow="ALWAYS" />
+                    <Separator style="-fx-background-color: #DDD3C0;" />
+                    <Button maxWidth="1.7976931348623157E308" prefHeight="44.0"
+                            text="➕   ADD STAFF" onAction="#onAddStaff"
+                            mnemonicParsing="false"
+                            style="-fx-background-color: #1E8449; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-font-size: 13;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian,rgba(30,132,73,0.4),10,0,0,3);" />
+                    <Button maxWidth="1.7976931348623157E308" prefHeight="42.0"
+                            text="🗑️  REMOVE SELECTED" onAction="#onRemoveStaff"
+                            mnemonicParsing="false"
+                            style="-fx-background-color: #922B21; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-font-size: 12;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian,rgba(146,43,33,0.4),10,0,0,3);" />
+                  </children>
+                </VBox>
+
+                <!-- Staff table -->
+                <VBox HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #FEFCF8; -fx-background-radius: 12;
+                             -fx-border-color: #DDD3C0; -fx-border-radius: 12;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="52.0" spacing="10"
+                          style="-fx-background-color: #F5F0E8;
+                                 -fx-background-radius: 12 12 0 0;
+                                 -fx-border-color: transparent transparent #DDD3C0 transparent;
+                                 -fx-border-width: 1;">
+                      <padding><Insets left="22.0" right="22.0" /></padding>
+                      <children>
+                        <Label style="-fx-font-size: 16;" text="👥" />
+                        <Label style="-fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-font-weight: bold;" text="Staff List">
+                          <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                      </children>
+                    </HBox>
+                    <TableView fx:id="staff_tableView" VBox.vgrow="ALWAYS"
+                               style="-fx-background-color: transparent;
+                                      -fx-border-color: transparent;
+                                      -fx-table-cell-border-color: #EDE8DF;">
+                      <columns>
+                        <TableColumn fx:id="staff_col_name"   text="Name"   prefWidth="200.0" />
+                        <TableColumn fx:id="staff_col_role"   text="Role"   prefWidth="150.0" />
+                        <TableColumn fx:id="staff_col_status" text="Status" prefWidth="120.0" />
+                      </columns>
+                      <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                      </columnResizePolicy>
+                    </TableView>
+                  </children>
+                </VBox>
+
+              </children>
+            </HBox>
+
+          </children>
+        </AnchorPane>
+        <!-- END: staff_form -->
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             FORM 6: SETTINGS  (fx:id="settings_form")
+             Shop info fields + Save + Logout
+             ═══════════════════════════════════════════════════════════ -->
+        <AnchorPane fx:id="settings_form" visible="false">
+          <children>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="16.0" prefHeight="74.0"
+                  style="-fx-background-color: #FBF8F3;
+                         -fx-border-color: transparent transparent #DDD3C0 transparent;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.06),12,0,0,4);"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+              <padding><Insets left="28.0" right="28.0" /></padding>
+              <children>
+                <VBox spacing="2">
+                  <children>
+                    <Label style="-fx-font-size: 20; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Settings">
+                      <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+                    <Label style="-fx-text-fill: #9E826A; -fx-font-size: 12;"
+                           text="Configure your CafeMaster application" />
+                  </children>
+                </VBox>
+              </children>
+            </HBox>
+
+            <!-- Settings card -->
+            <VBox spacing="14.0"
+                  AnchorPane.leftAnchor="40.0"  AnchorPane.rightAnchor="40.0"
+                  AnchorPane.topAnchor="100.0"  AnchorPane.bottomAnchor="40.0"
+                  style="-fx-background-color: #FEFCF8; -fx-background-radius: 14;
+                         -fx-border-color: #DDD3C0; -fx-border-radius: 14;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.08),14,0,0,4);">
+              <padding><Insets top="30.0" bottom="30.0" left="36.0" right="36.0" /></padding>
+              <children>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <children>
+                    <Label style="-fx-font-size: 22;" text="⚙️" />
+                    <Label style="-fx-font-size: 17; -fx-text-fill: #1C1008;
+                                  -fx-font-weight: bold;" text="Shop Settings">
+                      <font><Font name="System Bold" size="17.0" /></font>
+                    </Label>
+                  </children>
+                </HBox>
+                <Separator style="-fx-background-color: #DDD3C0;" />
+                <!-- Shop Name -->
+                <VBox spacing="6">
+                  <children>
+                    <Label style="-fx-text-fill: #5A4030; -fx-font-size: 12;
+                                  -fx-font-weight: bold;" text="Shop Name" />
+                    <TextField fx:id="settings_shopName" prefHeight="42.0"
+                               promptText="e.g.  CafeMaster"
+                               style="-fx-background-color: #F5F0E8;
+                                      -fx-border-color: #C8B89A; -fx-border-radius: 8;
+                                      -fx-background-radius: 8; -fx-padding: 0 14 0 14;
+                                      -fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-prompt-text-fill: #B8A080;" />
+                  </children>
+                </VBox>
+                <!-- Admin Name -->
+                <VBox spacing="6">
+                  <children>
+                    <Label style="-fx-text-fill: #5A4030; -fx-font-size: 12;
+                                  -fx-font-weight: bold;" text="Admin Name" />
+                    <TextField fx:id="settings_adminName" prefHeight="42.0"
+                               promptText="e.g.  Admin User"
+                               style="-fx-background-color: #F5F0E8;
+                                      -fx-border-color: #C8B89A; -fx-border-radius: 8;
+                                      -fx-background-radius: 8; -fx-padding: 0 14 0 14;
+                                      -fx-font-size: 14; -fx-text-fill: #1C1008;
+                                      -fx-prompt-text-fill: #B8A080;" />
+                  </children>
+                </VBox>
+                <!-- DB URL (read-only) -->
+                <VBox spacing="6">
+                  <children>
+                    <Label style="-fx-text-fill: #5A4030; -fx-font-size: 12;
+                                  -fx-font-weight: bold;" text="Database URL  (read-only)" />
+                    <TextField fx:id="settings_dbUrl" prefHeight="42.0"
+                               text="jdbc:mysql://localhost:3306/CafeMaster"
+                               editable="false"
+                               style="-fx-background-color: #EDE8DF;
+                                      -fx-border-color: #C8B89A; -fx-border-radius: 8;
+                                      -fx-background-radius: 8; -fx-padding: 0 14 0 14;
+                                      -fx-font-size: 13; -fx-text-fill: #7B6555;" />
+                  </children>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <Separator style="-fx-background-color: #DDD3C0;" />
+                <!-- Action row -->
+                <HBox spacing="12.0">
+                  <children>
+                    <Button text="💾   SAVE SETTINGS" onAction="#onSaveSettings"
+                            mnemonicParsing="false" prefHeight="44.0"
+                            HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                            style="-fx-background-color: #C8922A; -fx-text-fill: #1C1008;
+                                   -fx-font-weight: bold; -fx-font-size: 13;
+                                   -fx-background-radius: 8; -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian,rgba(200,146,42,0.4),10,0,0,3);" />
+                    <Button fx:id="settings_logoutBtn"
+                            text="🚪   LOGOUT" onAction="#onLogout"
+                            mnemonicParsing="false" prefHeight="44.0"
+                            HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308"
+                            style="-fx-background-color: #6B2213; -fx-text-fill: #F5C6B8;
+                                   -fx-font-weight: bold; -fx-font-size: 13;
+                                   -fx-background-radius: 8; -fx-cursor: hand;" />
+                  </children>
+                </HBox>
+              </children>
+            </VBox>
+
+          </children>
+        </AnchorPane>
+        <!-- END: settings_form -->
+
+
+      </children>
+    </StackPane>
+
+  </children>
+</AnchorPane>
